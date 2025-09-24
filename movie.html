@@ -2,30 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MovieBox</title>
-
-  <!-- Custom CSS -->
+  <title>Mr.Bablu</title>
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Video.js CSS -->
-  <link href="https://vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet" />
 </head>
 <body>
-
   <h1 id="movieTitle"></h1>
   <img id="moviePoster" class="poster" />
-
-  <!-- Video Container -->
-  <div id="videoContainer">
-    <!-- Player will be injected here by movie.js -->
-  </div>
-
-  <!-- Video.js JS -->
-  <script src="https://vjs.zencdn.net/7.11.4/video.js"></script>
-
-  <!-- Your Smart Embed Loader -->
+  <iframe id="movieEmbed" width="100%" height="900" frameborder="0" allowfullscreen></iframe>
   <script src="movie.js"></script>
-
 </body>
 </html>
