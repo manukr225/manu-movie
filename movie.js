@@ -10,14 +10,12 @@ fetch('data/movies.json')
     document.getElementById('movieTitle').textContent = movie.title;
     document.getElementById('moviePoster').src = movie.poster;
 
-    const embedContainer = document.getElementById('movieEmbed');
+    const embedContainer = document.getElementById('videoContainer');
 
     if (movie.format === "iframe") {
-      embedContainer.outerHTML = `<iframe src="${movie.embed}" width="100%" height="600" frameborder="0" allowfullscreen></iframe>`;
-    }
-
-    else if (movie.format === "hls") {
-      embedContainer.outerHTML = `
+      document.getElementById('movieEmbed').src = movie.embed;
+    } else if (movie.format === "hls") {
+      embedContainer.innerHTML = `
         <video id="video" controls width="100%" height="600"></video>
         <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
         <script>
@@ -31,10 +29,8 @@ fetch('data/movies.json')
           }
         </script>
       `;
-    }
-
-    else if (movie.format === "flv") {
-      embedContainer.outerHTML = `
+    } else if (movie.format === "flv") {
+      embedContainer.innerHTML = `
         <video id="videoElement" controls width="100%" height="600"></video>
         <script src="https://cdn.jsdelivr.net/npm/flv.js@latest"></script>
         <script>
@@ -49,4 +45,7 @@ fetch('data/movies.json')
           }
         </script>
       `;
+    } else {
+      embedContainer.innerHTML = `<p>Unsupported format: ${movie.format}</p>`;
     }
+  });
