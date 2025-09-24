@@ -10,42 +10,59 @@ fetch('data/movies.json')
     document.getElementById('movieTitle').textContent = movie.title;
     document.getElementById('moviePoster').src = movie.poster;
 
-    const embedContainer = document.getElementById('videoContainer');
+    const embedContainer = document.getElementById('movieEmbed');
 
     if (movie.format === "iframe") {
-      document.getElementById('movieEmbed').src = movie.embed;
-    } else if (movie.format === "hls") {
-      embedContainer.innerHTML = `
-        <video id="video" controls width="100%" height="600"></video>
-        <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-        <script>
-          const video = document.getElementById('video');
-          if (Hls.isSupported()) {
-            const hls = new Hls();
-            hls.loadSource("${movie.embed}");
-            hls.attachMedia(video);
-          } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = "${movie.embed}";
-          }
-        </script>
-      `;
-    } else if (movie.format === "flv") {
-      embedContainer.innerHTML = `
-        <video id="videoElement" controls width="100%" height="600"></video>
-        <script src="https://cdn.jsdelivr.net/npm/flv.js@latest"></script>
-        <script>
-          if (flvjs.isSupported()) {
-            const player = flvjs.createPlayer({
-              type: 'flv',
-              url: "${movie.embed}"
-            });
-            player.attachMediaElement(document.getElementById('videoElement'));
-            player.load();
-            player.play();
-          }
-        </script>
-      `;
-    } else {
-      embedContainer.innerHTML = `<p>Unsupported format: ${movie.format}</p>`;
+      embedContainer.src = movie.embed;
+    }
+
+    else if (movie.format === "hls") {
+      const video = document.createElement('video');
+      video.id = "video";
+      video.controls = true;
+      video.width = "100%";
+      video.height = 600;
+      embedContainer.replaceWith(video);
+
+      const script = document.createElement('script');
+      script.src = "https://cdn.jsdelivr.net/npm/hls.js@latest";
+      script.onload = () => {
+        if (Hls.isSupported()) {
+          const hls = new Hls();
+          hls.loadSource(movie.embed);
+          hls.attachMedia(video);
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = movie.embed;
+        }
+      };
+      document.body.appendChild(script);
+    }
+
+    else if (movie.format === "flv") {
+      const video = document.createElement('video');
+      video.id = "videoElement";
+      video.controls = true;
+      video.width = "100%";
+      video.height = 600;
+      embedContainer.replaceWith(video);
+
+      const script = document.createElement('script');
+      script.src = "https://cdn.jsdelivr.net/npm/flv.js@latest";
+      script.onload = () => {
+        if (flvjs.isSupported()) {
+          const player = flvjs.createPlayer({
+            type: 'flv',
+            url: movie.embed
+          });
+          player.attachMediaElement(video);
+          player.load();
+          player.play();
+        }
+      };
+      document.body.appendChild(script);
+    }
+
+    else {
+      embedContainer.outerHTML = `<p>Unsupported format: ${movie.format}</p>`;
     }
   });
