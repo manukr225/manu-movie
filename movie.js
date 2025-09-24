@@ -38,6 +38,18 @@ fetch('data/movies.json')
       document.body.appendChild(script);
     }
 
+      else if (movie.format === "videojs") {
+  const container = document.getElementById('videoContainer');
+  container.innerHTML = `
+    <video id="my-video" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="600">
+      <source src="${movie.embed}" type="application/x-mpegURL">
+      Your browser does not support the video tag.
+    </video>
+  `;
+  videojs(document.getElementById('my-video')); // Initialize player
+}
+
+
     else if (movie.format === "flv") {
       const video = document.createElement('video');
       video.id = "videoElement";
