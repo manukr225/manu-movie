@@ -1,0 +1,48 @@
+body {
+  margin: 0;
+  padding: 20px;
+  background-color: #111;
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #1c1c1c;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+}
+
+.card-title {
+  padding: 10px;
+  font-size: 15px;
+}
+
+.poster {
+  display: block;
+  max-width: 300px;
+  margin: 0 auto 20px;
+  border-radius: 10px;
+}
