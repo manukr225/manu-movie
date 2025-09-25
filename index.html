@@ -1,20 +1,119 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Bablu_MovieBox</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Movie Gallery</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #111;
+      color: white;
+    }
+
+    header {
+      background-color: #000;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .card {
+      width: 200px;
+      background: #222;
+      border-radius: 8px;
+      overflow: hidden;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card img {
+      width: 100%;
+      height: auto;
+    }
+
+    .card-title {
+      padding: 10px;
+      font-weight: bold;
+    }
+
+    .card-category {
+      padding-bottom: 10px;
+      font-size: 0.9em;
+      color: #bbb;
+    }
+  </style>
 </head>
 <body>
-  <h1>🎬 MovieBox</h1>
-  <input type="text" id="searchInput" placeholder="Search movies..." />
-  <select id="categoryFilter">
-    <option value="">All Categories</option>
-    <option value="Hindi">Hindi</option>
-    <option value="Sci-Fi">Sci-Fi</option>
-  </select>
-  <div id="movieGrid" class="card-grid"></div>
-  <script src="script.js"></script>
+  <header>
+    
+    <h1>🎬 Movie Gallery</h1>
+  </header>
+
+  <div style="padding: 20px; text-align: center;">
+  <input 
+    type="text" 
+    id="searchInput" 
+    placeholder="Search movies..." 
+    style="padding: 10px; width: 300px; border-radius: 5px; border: none; font-size: 16px;">
+</div>
+
+  <div class="gallery" id="gallery"></div>
+
+  <script>
+  let allMovies = [];
+
+  fetch('movies.json')
+    .then(res => res.json())
+    .then(movies => {
+      allMovies = movies;
+      displayMovies(allMovies);
+    });
+
+  function displayMovies(movies) {
+    const gallery = document.getElementById('gallery');
+    gallery.innerHTML = '';
+    movies.forEach(movie => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.onclick = () => window.location.href = `player.html?id=${movie.id}`;
+      card.innerHTML = `
+        <img src="${movie.poster}" alt="${movie.title}">
+        <div class="card-title">${movie.title}</div>
+        <div class="card-category">${movie.category}</div>
+      `;
+      gallery.appendChild(card);
+    });
+  }
+
+  // ✅ SEARCH Feature
+  document.getElementById('searchInput').addEventListener('input', function () {
+    const searchTerm = this.value.toLowerCase();
+    const filtered = allMovies.filter(movie => 
+      movie.title.toLowerCase().includes(searchTerm) || 
+      movie.category.toLowerCase().includes(searchTerm)
+    );
+    displayMovies(filtered);
+  });
+</script>
+
 </body>
 </html>
